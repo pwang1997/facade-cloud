@@ -16,7 +16,7 @@ ENV SPRING_PROFILES_ACTIVE=prod
 
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-COPY ./src/main/resources/application-prod.properties /app/application-prod.properties
+COPY src/main/resources/application-prod.properties /app/application-prod.properties
 
 # Set the entry point to run the Spring Boot application
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -11,7 +11,7 @@ target/
 .vscode/
 
 # Ignore Docker-related files
-Dockerfile*
+../Dockerfile
 docker-compose.yml
 .dockerignore
 

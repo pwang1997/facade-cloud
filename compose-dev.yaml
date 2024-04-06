@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   mysql:
+    container_name: facade-mysql
     image: 'mysql:8.1.0'
     environment:
       MYSQL_ROOT_PASSWORD: password
@@ -10,27 +11,36 @@ services:
     ports:
       - "3306:3306"
     restart: always
+
   redis:
+    container_name: facade-redis
     image: 'redis:7-alpine'
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --maxmemory 128mb --maxmemory-policy volatile-lru
     networks:
       - facade_network
-  #  rabbitmq:
-  #    image: rabbitmq:3.9.13-management # Use the RabbitMQ image with management plugin
-  #    container_name: rabbitmq
-  #    ports:
-  #      - "5672:5672" # AMQP port
-  #      - "15672:15672" # Management UI port
-  #    environment:
-  #      - RABBITMQ_DEFAULT_USER=admin # RabbitMQ username
-  #      - RABBITMQ_DEFAULT_PASS=admin # RabbitMQ password
-  #    volumes:
-  #      - rabbitmq_data:/var/lib/rabbitmq # Persist RabbitMQ data
+    restart: always
+
+  rabbitmq:
+    container_name: facade-rabbitmq
+    image: rabbitmq:3.9.13-management # Use the RabbitMQ image with management plugin
+    ports:
+      - "5672:5672" # AMQP port
+      - "15672:15672" # Management UI port
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin # RabbitMQ username
+      - RABBITMQ_DEFAULT_PASS=admin # RabbitMQ password
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq # Persist RabbitMQ data
+    restart: always
 
 networks:
   facade_network:
 
 volumes:
   mysql-data:
-#  rabbitmq_data: # Volume to persist RabbitMQ data
+  redis_data:
+  rabbitmq_data:
