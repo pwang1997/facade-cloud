@@ -1,0 +1,19 @@
+# Ignore Gradle build directories
+.gradle
+build/
+
+# Ignore Maven build directories
+target/
+*.iml
+
+# Ignore IDE-specific files
+.idea/
+.vscode/
+
+# Ignore Docker-related files
+Dockerfile*
+docker-compose.yml
+.dockerignore
+
+# Ignore test directories
+src/test/
