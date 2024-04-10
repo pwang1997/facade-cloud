@@ -6,6 +6,7 @@ import com.facade.facadecore.core.tag.model.TagResponses;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Puck Wang
@@ -17,8 +18,10 @@ public interface TagController {
 
     ResponseEntity<TagResponse> create(TagDTO tagDTO);
 
-    ResponseEntity<Void> delete(Long id);
+    ResponseEntity<Void> delete(UUID id);
 
-    ResponseEntity<Void> delete(List<Long> id);
+    ResponseEntity<Void> delete(List<UUID> id);
+    ResponseEntity<TagResponses> adminList(List<String> relatedToFetch);
+    ResponseEntity<TagResponse> update(UUID id, TagDTO tagDTO);
 
 }

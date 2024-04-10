@@ -22,7 +22,7 @@ public interface ProjectController {
 
     ResponseEntity<ProjectResponse> create(ProjectDTO projectDTO);
 
-    ResponseEntity<ProjectResponse> update(ProjectDTO projectDTO);
+    ResponseEntity<ProjectResponse> update(UUID id, ProjectDTO projectDTO);
 
     ResponseEntity<Void> delete(UUID id);
 

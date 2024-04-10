@@ -1,0 +1,29 @@
+server:
+  port: 8000
+spring:
+  application:
+    name: facade-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: core_route_1
+          uri: http://127.0.0.1:8100
+          predicates:
+            - Path=/api/v1/**
+#            - Weight=group1, 5
+#        - id: core_route_2
+#          uri: http://127.0.0.1:8101
+#          predicates:
+#            - Path=/api/v1/**
+#            - Weight=group1, 5
+
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:8080

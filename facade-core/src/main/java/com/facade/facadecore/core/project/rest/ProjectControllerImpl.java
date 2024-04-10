@@ -81,9 +81,9 @@ public class ProjectControllerImpl implements ProjectController {
     }
 
     @Override
-    @PutMapping
+    @PutMapping("/{id}")
     @CrossOrigin(origins = "*", allowedHeaders = "*", methods = RequestMethod.PUT)
-    public ResponseEntity<ProjectResponse> update(@RequestBody ProjectDTO projectDTO) {
+    public ResponseEntity<ProjectResponse> update(@PathVariable(name = "id") UUID id, @RequestBody ProjectDTO projectDTO) {
         ProjectBO projectBO = projectMapper.mapToBO(projectDTO);
         ProjectBO updatedProjectBO = projectManager.update(projectBO);
         ProjectDTO updatedProjectDTO = projectMapper.mapToDTO(updatedProjectBO);

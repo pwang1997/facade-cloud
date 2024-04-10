@@ -15,10 +15,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static com.facade.facadecore.constant.Subjects.*;
@@ -47,10 +44,10 @@ public class TagManager implements AsyncSQLExecutor {
         return (List<TagBO>) tagDao.findAll();
     }
 
-    public Map<Long, ?> fetchRelatedSubjects(String relatedSubject, List<Long> tagIds) {
-        Map<Long, Long> countMap = new HashMap<>();
+    public Map<UUID, ?> fetchRelatedSubjects(String relatedSubject, List<UUID> tagIds) {
+        Map<UUID, Long> countMap = new HashMap<>();
         if (relatedSubject.equals(SUBJECT_POST)) {
-            for (Long tagId : tagIds) {
+            for (UUID tagId : tagIds) {
                 countMap.put(tagId, postDao.countRelatedPostByTagId(tagId));
             }
         }
@@ -73,7 +70,7 @@ public class TagManager implements AsyncSQLExecutor {
         return (List<TagBO>) tagDao.saveAll(tagBOs);
     }
 
-    public TagBO get(Long id) {
+    public TagBO get(UUID id) {
         return tagDao.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
@@ -83,13 +80,13 @@ public class TagManager implements AsyncSQLExecutor {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(UUID id) {
         tagDao.deleteById(id);
         systemMetricsManager.invalidateSystemMetricsKey();
     }
 
     @Transactional
-    public void batchDelete(List<Long> ids) {
+    public void batchDelete(List<UUID> ids) {
         tagDao.deleteAllById(ids);
         systemMetricsManager.invalidateSystemMetricsKey();
     }

@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.UUID;
+
 /**
  * @author Puck Wang
  * @project Blog
@@ -22,7 +24,8 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @SuperBuilder
 public class TagDTO extends BaseDTO {
-    private Long id;
+    private UUID id;
     @NotNull
     private String name;
+    private boolean published;
 }

@@ -6,13 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Puck Wang
  * @project Blog
  * @created 1/24/2024
  */
-public interface TagDao extends CrudRepository<TagBO, Long> {
+public interface TagDao extends CrudRepository<TagBO, UUID> {
 
     @Query(
             nativeQuery = true,

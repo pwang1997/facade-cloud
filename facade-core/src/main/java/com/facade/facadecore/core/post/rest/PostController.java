@@ -23,7 +23,7 @@ public interface PostController {
 
     ResponseEntity<PostResponse> create(PostDTO article);
 
-    ResponseEntity<PostResponse> update(PostDTO article);
+    ResponseEntity<PostResponse> update(UUID id, PostDTO article);
 
     ResponseEntity<Void> delete(UUID id);
 

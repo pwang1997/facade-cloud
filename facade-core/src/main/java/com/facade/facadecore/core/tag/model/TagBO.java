@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author Puck Wang
@@ -25,11 +26,14 @@ import java.util.Objects;
 public class TagBO extends BaseBO {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(name = "name", unique = true)
     private String name;
+
+    @Column(name = "published", columnDefinition = "boolean default false")
+    private boolean published;
 
     @Override
     public final boolean equals(Object object) {

@@ -18,7 +18,7 @@ import java.util.UUID;
 public interface PostDao extends CrudRepository<PostBO, UUID> {
 
     @Query(value = "SELECT COUNT(post_id) FROM  post_tag_assn WHERE tag_id = ?1", nativeQuery = true)
-    Long countRelatedPostByTagId(Long tagId);
+    Long countRelatedPostByTagId(UUID tagId);
 
     @Query(value = "SELECT * FROM posts WHERE published = true", nativeQuery = true)
     List<PostBO> findAllPublished();

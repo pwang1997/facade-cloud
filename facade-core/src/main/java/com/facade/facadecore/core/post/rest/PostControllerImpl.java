@@ -89,9 +89,9 @@ public class PostControllerImpl implements PostController {
     }
 
     @Override
-    @PutMapping
+    @PutMapping("/{id}")
     @CrossOrigin(origins = "*", allowedHeaders = "*", methods = RequestMethod.PUT)
-    public ResponseEntity<PostResponse> update(@RequestBody PostDTO article) {
+    public ResponseEntity<PostResponse> update(@PathVariable(name = "id") UUID id, @RequestBody PostDTO article) {
         log.debug("Updating article: {}", article);
 
         PostBO postBO = articleMapper.mapToBO(article);

@@ -17,6 +17,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.facade.facadecore.constant.RestEndpoint.REST_V1_TAGS;
 
@@ -41,12 +42,14 @@ public class TagControllerImpl implements TagController {
         List<TagBO> tagBOS = tagManager.list();
         List<TagDTO> tagDTOS = tagBOS.stream().map(tagMapper::mapToDTO).toList();
 
-        List<Long> tagIds = tagBOS.stream().map(TagBO::getId).toList();
+        List<UUID> tagIds = tagBOS.stream().filter(TagBO::isPublished).map(TagBO::getId).toList();
 
         Map<String, Map<?, ?>> metaMap = (Map<String, Map<?, ?>>) fetchRelatedFields(tagIds, relatedToFetch);
 
         return ResponseEntity.ok(new TagResponses(tagDTOS, metaMap));
     }
+
+
 
     @Override
     @PostMapping
@@ -67,7 +70,7 @@ public class TagControllerImpl implements TagController {
     @Override
     @DeleteMapping("/{id}")
     @CrossOrigin(origins = "*", allowedHeaders = "*", methods = RequestMethod.DELETE)
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") UUID id) {
         log.debug("Deleting tag with id:{}", id);
 
         tagManager.delete(id);
@@ -79,7 +82,7 @@ public class TagControllerImpl implements TagController {
     @Override
     @DeleteMapping("/batch")
     @CrossOrigin(origins = "*", allowedHeaders = "*", methods = RequestMethod.DELETE)
-    public ResponseEntity<Void> delete(@RequestBody List<Long> ids) {
+    public ResponseEntity<Void> delete(@RequestBody List<UUID> ids) {
         log.debug("Deleting tags with ids:{}", ids);
 
         tagManager.batchDelete(ids);
@@ -88,13 +91,33 @@ public class TagControllerImpl implements TagController {
         return ResponseEntity.noContent().build();
     }
 
-    private Map<?, ?> fetchRelatedFields(List<Long> tagIds, List<String> relatedToFetch) {
+    @Override
+    @GetMapping("/admin/list")
+    public ResponseEntity<TagResponses> adminList(@RequestParam(name = "relatedToFetch", required = false) List<String> relatedToFetch) {
+        List<TagBO> tagBOS = tagManager.list();
+        List<TagDTO> tagDTOS = tagBOS.stream().map(tagMapper::mapToDTO).toList();
+
+        List<UUID> tagIds = tagBOS.stream().map(TagBO::getId).toList();
+
+        Map<String, Map<?, ?>> metaMap = (Map<String, Map<?, ?>>) fetchRelatedFields(tagIds, relatedToFetch);
+
+        return ResponseEntity.ok(new TagResponses(tagDTOS, metaMap));
+    }
+
+    @Override
+    @PutMapping("/{id}")
+    public ResponseEntity<TagResponse> update(@PathVariable(name = "id")  UUID id, @RequestBody TagDTO tagDTO) {
+        TagDTO update = tagMapper.mapToDTO(tagManager.update(tagMapper.mapToBO(tagDTO)));
+        return ResponseEntity.ok(new TagResponse(update));
+    }
+
+    private Map<?, ?> fetchRelatedFields(List<UUID> tagIds, List<String> relatedToFetch) {
         if (CollectionUtils.isEmpty(relatedToFetch)) {
             return Map.of();
         }
         Map<String, Map<?, ?>> metaMap = new HashMap<>();
         for (String subject : relatedToFetch) {
-            Map<Long, ?> map = tagManager.fetchRelatedSubjects(subject, tagIds);
+            Map<UUID, ?> map = tagManager.fetchRelatedSubjects(subject, tagIds);
             metaMap.put(subject, map);
         }
 
