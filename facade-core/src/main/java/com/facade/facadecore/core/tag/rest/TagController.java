@@ -24,4 +24,5 @@ public interface TagController {
     ResponseEntity<TagResponses> adminList(List<String> relatedToFetch);
     ResponseEntity<TagResponse> update(UUID id, TagDTO tagDTO);
 
+    ResponseEntity<TagResponse> get(UUID id);
 }

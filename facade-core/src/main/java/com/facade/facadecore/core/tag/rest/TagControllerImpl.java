@@ -111,6 +111,13 @@ public class TagControllerImpl implements TagController {
         return ResponseEntity.ok(new TagResponse(update));
     }
 
+    @Override
+    @GetMapping("/{id}")
+    public ResponseEntity<TagResponse> get(@PathVariable(name = "id")UUID id) {
+        TagDTO tagDTO = tagMapper.mapToDTO(tagManager.get(id));
+        return ResponseEntity.ok(new TagResponse(tagDTO));
+    }
+
     private Map<?, ?> fetchRelatedFields(List<UUID> tagIds, List<String> relatedToFetch) {
         if (CollectionUtils.isEmpty(relatedToFetch)) {
             return Map.of();
