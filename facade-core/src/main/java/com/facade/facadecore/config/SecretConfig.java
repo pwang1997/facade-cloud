@@ -21,11 +21,7 @@ public class SecretConfig {
     @Value("${secret.api}")
     private String secretToken;
 
-    @Value("${server.host}")
-    private String host;
-
     @Value("${redis.host}")
     private String redisHost;
-    @Value("${redis.port}")
-    private int redisPort;
+    private final int redisPort = 6379;
 }

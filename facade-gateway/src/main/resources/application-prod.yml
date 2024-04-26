@@ -10,12 +10,12 @@ spring:
     gateway:
       routes:
         - id: core_route_1
-          uri: http://127.0.0.1:8100
+          uri: http://23.20.5.224:8100
           predicates:
             - Path=/api/v1/**
             - Weight=group1, 5
         - id: core_route_2
-          uri: http://127.0.0.1:8101
+          uri: http://23.20.5.224:8101
           predicates:
             - Path=/api/v1/**
             - Weight=group1, 5
@@ -27,14 +27,8 @@ spring:
             allowed-origins: "*"
             allowed-methods: "*"
             allowed-headers: "*"
-##            allow-credentials: true
 #    nacos:
 #      discovery:
 #        server-addr: localhost:8848
 #        username: nacos
 #        password: nacos
-#
-##    sentinel:
-##      transport:
-##        port: 8719
-##        dashboard: localhost:8080
