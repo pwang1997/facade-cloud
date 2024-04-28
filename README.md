@@ -14,7 +14,6 @@ and extensible features, making it an ideal choice for developers looking for a 
 
 - Support most blog functions, including CRUD on entities for blogs, projects and tags.
 - Support Markdown-based content.
-- Dockerization.You can also find image on `docker pull pwangdev/facade-spring-boot`
 - Async SQL executions.
 - GitHub Action on CI/CD
 - Redis Cache on entities blogs and projects

@@ -10,12 +10,12 @@ spring:
     gateway:
       routes:
         - id: core_route_1
-          uri: http://23.20.5.224:8100
+          uri: http://
           predicates:
             - Path=/api/v1/**
             - Weight=group1, 5
         - id: core_route_2
-          uri: http://23.20.5.224:8101
+          uri: http://
           predicates:
             - Path=/api/v1/**
             - Weight=group1, 5
