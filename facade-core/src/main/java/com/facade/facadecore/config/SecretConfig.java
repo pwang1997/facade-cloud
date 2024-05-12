@@ -24,4 +24,7 @@ public class SecretConfig {
     @Value("${redis.host}")
     private String redisHost;
     private final int redisPort = 6379;
+
+    @Value("${secret.redis.password}")
+    private String redisPassword;
 }

@@ -48,6 +48,7 @@ public class JedisConfig {
                 .build();
 
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(secretConfig.getRedisHost(), secretConfig.getRedisPort());
+        redisStandaloneConfiguration.setPassword(secretConfig.getRedisPassword());
         return new JedisConnectionFactory(redisStandaloneConfiguration, jedisClientConfiguration);
     }
 
