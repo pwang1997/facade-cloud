@@ -1,7 +1,9 @@
 package com.facade.facadecore.core.project;
 
 import static com.facade.facadecore.constant.Actions.COUNT_UNIQUE;
-import static com.facade.facadecore.constant.RedisConstant.REDIS_KEY_PROJECT;
+import static com.facade.facadecore.constant.RedisConstant.REDIS_KEY_PROJECT_ID;
+import static com.facade.facadecore.constant.RedisConstant.REDIS_KEY_PROJECT_VIEWS;
+import static com.facade.facadecore.constant.RedisConstant.REDIS_KEY_PROJECT_VIEW_ACCESS;
 import static com.facade.facadecore.constant.Subjects.SUBJECT_PROJECT;
 
 import com.facade.facadecore.base.AsyncSQLExecutor;
@@ -80,7 +82,7 @@ public class ProjectManager implements AsyncSQLExecutor, RedisAction<UUID> {
     }
     updateViews(id.toString(), projectBO.getMetrics().getViews());
 
-    Long dirtyViews = (Long) redisManager.hGet("PROJECT-VIEWS", id.toString());
+    Long dirtyViews = (Long) redisManager.hGet(REDIS_KEY_PROJECT_VIEWS, id.toString());
     projectBO.getMetrics().setViews(dirtyViews);
     return projectBO;
   }
@@ -147,23 +149,22 @@ public class ProjectManager implements AsyncSQLExecutor, RedisAction<UUID> {
 
   @Async("asyncSQLExecutor")
   public void updateViews(String id, long currentViews) {
-    String key = "PROJECT-VIEWS";
-    if (ObjectUtils.isEmpty(redisManager.hGet(key, id))) {
-      redisManager.hSet(key, id, currentViews);
+    if (ObjectUtils.isEmpty(redisManager.hGet(REDIS_KEY_PROJECT_VIEWS, id))) {
+      redisManager.hSet(REDIS_KEY_PROJECT_VIEWS, id, currentViews);
     } else {
-      Long views = (Long) redisManager.hGet(key, id);
-      redisManager.hIncr(key, id, views + 1);
+      Long views = (Long) redisManager.hGet(REDIS_KEY_PROJECT_VIEWS, id);
+      redisManager.hIncr(REDIS_KEY_PROJECT_VIEWS, id, views + 1);
     }
   }
 
   @Override
   public String getRedisKeyById(UUID id) {
-    return REDIS_KEY_PROJECT + "-id-" + id;
+    return REDIS_KEY_PROJECT_ID + id;
   }
 
   @Override
   public String getRedisKeyByPublished(boolean publishedOnly) {
-    return REDIS_KEY_PROJECT + "-publishedOnly-" + publishedOnly;
+    return REDIS_KEY_PROJECT_VIEW_ACCESS + publishedOnly;
   }
 
   @Override

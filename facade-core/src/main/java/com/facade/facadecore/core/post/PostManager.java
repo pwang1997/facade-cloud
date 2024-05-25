@@ -1,7 +1,9 @@
 package com.facade.facadecore.core.post;
 
 import static com.facade.facadecore.constant.Actions.COUNT_UNIQUE;
-import static com.facade.facadecore.constant.RedisConstant.REDIS_KEY_POST;
+import static com.facade.facadecore.constant.RedisConstant.REDIS_KEY_POST_ID;
+import static com.facade.facadecore.constant.RedisConstant.REDIS_KEY_POST_VIEWS;
+import static com.facade.facadecore.constant.RedisConstant.REDIS_KEY_POST_VIEW_ACCESS;
 import static com.facade.facadecore.constant.Subjects.SUBJECT_PROJECT;
 
 import com.facade.facadecore.base.AsyncSQLExecutor;
@@ -85,7 +87,7 @@ public class PostManager implements AsyncSQLExecutor, RedisAction<UUID> {
     }
     updateViews(String.valueOf(uuid), postBO.getMetrics().getViews());
 
-    Long dirtyViews = (Long) redisManager.hGet("POST-VIEWS", uuid.toString());
+    Long dirtyViews = (Long) redisManager.hGet(REDIS_KEY_POST_VIEWS, uuid.toString());
     postBO.getMetrics().setViews(dirtyViews);
     return postBO;
   }
@@ -143,12 +145,12 @@ public class PostManager implements AsyncSQLExecutor, RedisAction<UUID> {
 
   @Override
   public String getRedisKeyById(UUID id) {
-    return REDIS_KEY_POST + "-id-" + id;
+    return REDIS_KEY_POST_ID + id;
   }
 
   @Override
   public String getRedisKeyByPublished(boolean publishedOnly) {
-    return REDIS_KEY_POST + "-publishedOnly-" + publishedOnly;
+    return REDIS_KEY_POST_VIEW_ACCESS + publishedOnly;
   }
 
   @Override
@@ -172,12 +174,11 @@ public class PostManager implements AsyncSQLExecutor, RedisAction<UUID> {
 
   @Async("asyncSQLExecutor")
   public void updateViews(String id, long currentViews) {
-    String redisKey = "POST-VIEWS";
-    if (ObjectUtils.isEmpty(redisManager.hGet(redisKey, id))) {
-      redisManager.hSet(redisKey, id, currentViews);
+    if (ObjectUtils.isEmpty(redisManager.hGet(REDIS_KEY_POST_VIEWS, id))) {
+      redisManager.hSet(REDIS_KEY_POST_VIEWS, id, currentViews);
     } else {
-      Long views = (Long) redisManager.hGet(redisKey, id);
-      redisManager.hSet(redisKey, id, views + 1);
+      Long views = (Long) redisManager.hGet(REDIS_KEY_POST_VIEWS, id);
+      redisManager.hSet(REDIS_KEY_POST_VIEWS, id, views + 1);
     }
   }
 }
