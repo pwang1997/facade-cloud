@@ -181,4 +181,8 @@ public class PostManager implements AsyncSQLExecutor, RedisAction<UUID> {
       redisManager.hSet(REDIS_KEY_POST_VIEWS, id, views + 1);
     }
   }
+
+  public List<PostBO> search(String searchQuery) {
+    return postDao.search(searchQuery);
+  }
 }

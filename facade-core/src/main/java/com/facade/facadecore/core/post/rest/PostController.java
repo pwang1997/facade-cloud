@@ -29,4 +29,6 @@ public interface PostController {
   ResponseEntity<Void> delete(List<UUID> ids);
 
   ResponseEntity<PostResponses> export(Integer pageNumber, Integer pageSize);
+
+  ResponseEntity<PostResponses> search(String searchQuery);
 }
