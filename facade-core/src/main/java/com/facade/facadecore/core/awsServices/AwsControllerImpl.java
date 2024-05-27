@@ -2,6 +2,7 @@ package com.facade.facadecore.core.awsServices;
 
 import static com.facade.facadecore.constant.RestEndpoint.REST_V1_AWS_SERVICES;
 
+import java.util.concurrent.CompletableFuture;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,8 @@ public class AwsControllerImpl implements AwsController {
   @Override
   @PostMapping("/upload")
   public ResponseEntity<String> upload(@RequestPart(value = "file") MultipartFile file) {
-    String url = amazonClient.uploadFile(file);
+    CompletableFuture<String> urlFuture = amazonClient.uploadFile(file);
+    String url = urlFuture.join();
     return ResponseEntity.ok(url);
   }
 

@@ -12,8 +12,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,7 +45,8 @@ public class AwsClient {
     this.s3client = new AmazonS3Client(credentials);
   }
 
-  public String uploadFile(MultipartFile multipartFile) {
+  @Async("asyncAwsServiceExecutor")
+  public CompletableFuture<String> uploadFile(MultipartFile multipartFile) {
     String fileUrl = "";
     try {
       File file = convertMultiPartToFile(multipartFile);
@@ -54,7 +57,7 @@ public class AwsClient {
     } catch (Exception e) {
       log.error(e.getMessage());
     }
-    return fileUrl;
+    return CompletableFuture.completedFuture(fileUrl);
   }
 
   private File convertMultiPartToFile(MultipartFile file) throws IOException {

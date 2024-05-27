@@ -38,6 +38,25 @@ public class AsyncConfig {
         return executor;
     }
 
+
+    @Bean("asyncAwsServiceExecutor")
+    public Executor doAsyncAwsServiceExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutorBuilder()
+            .corePoolSize(10)
+            .maxPoolSize(20)
+            .queueCapacity(500)
+            .keepAlive(Duration.ofSeconds(30))
+            .threadNamePrefix("async-aws-service-")
+            .build();
+
+        executor.setRejectedExecutionHandler(
+            new ThreadPoolExecutor.CallerRunsPolicy()
+        );
+        executor.initialize();
+
+        return executor;
+    }
+
     @Bean("asyncJobExecutor")
     public Executor doAsyncJobExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutorBuilder()
